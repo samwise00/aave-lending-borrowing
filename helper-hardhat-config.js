@@ -7,7 +7,7 @@ const networkConfig = {
         entranceFee: ethers.utils.parseEther("0.01"),
         gasLane: "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
         subscriptionId: "5904",
-        callbackGasLimit: "5000000", // 500,000
+        callbackGasLimit: "1000000", // 500,000
         interval: "30",
     },
     31337: {
@@ -20,8 +20,10 @@ const networkConfig = {
 }
 
 const developmentChains = ["hardhat", "localhost"]
+const VERIFICATION_BLOCK_CONFIRMATIONS = 6
 
 module.exports = {
     networkConfig,
     developmentChains,
+    VERIFICATION_BLOCK_CONFIRMATIONS,
 }

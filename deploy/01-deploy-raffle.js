@@ -1,8 +1,12 @@
 const { networks, ethers } = require("hardhat")
-const { developmentChains, networkConfig } = require("../helper-hardhat-config")
+const {
+    developmentChains,
+    networkConfig,
+    VERIFICATION_BLOCK_CONFIRMATIONS,
+} = require("../helper-hardhat-config")
 const { verify } = require("../utils/verify.js")
 
-const VRF_SUB_FUND_AMOUNT = ethers.utils.parseEther("30")
+const VRF_SUB_FUND_AMOUNT = ethers.utils.parseEther("1")
 
 module.exports = async function ({ getNamedAccounts, deployments }) {
     const { deploy, log } = deployments
@@ -23,6 +27,12 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         subscriptionId = networkConfig[chainId]["subscriptionId"]
     }
 
+    const waitBlockConfirmations = developmentChains.includes(network.name)
+        ? 1
+        : VERIFICATION_BLOCK_CONFIRMATIONS
+
+    log("----------------------------------------------------")
+
     const entranceFee = networkConfig[chainId]["entranceFee"]
     const gasLane = networkConfig[chainId]["gasLane"]
     const callbackGasLimit = networkConfig[chainId]["callbackGasLimit"]
@@ -40,7 +50,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         from: deployer,
         args: args,
         log: true,
-        waitConfirmations: networkConfig.blockConfirmations || 1,
+        waitConfirmations: waitBlockConfirmations,
     })
 
     if (developmentChains.includes(network.name)) {
